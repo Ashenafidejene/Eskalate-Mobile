@@ -1,16 +1,76 @@
-# country
+# Countries Explorer
 
-A new Flutter project.
+A Flutter application that displays country information from REST Countries API with search and favorites functionality.
+
+## Features
+
+- Browse all countries in grid/list view
+- Search countries by name
+- View detailed country information
+- Add/remove favorites
+- Dark/Light theme support
+- Offline favorites storage
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK (latest stable version)
+- Dart SDK (comes with Flutter)
+- IDE: Android Studio or VSCode with Flutter plugins
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Ashenafidejene/Eskalate-Mobile.git
+   cd countries-explorer
+
+### Architecture
+The app follows Clean Architecture with:
+
+Presentation Layer: UI components (Widgets, BLoCs)
+
+Domain Layer: Business logic (Entities, Use Cases)
+
+Data Layer: Data sources (API, Local Storage)
+
+## State Management
+Using BLoC pattern for:
+
+Clear separation of concerns
+
+Predictable state changes
+
+Easy testing
+
+Folder Structure
+
+lib/
+├── core/
+│   ├── errors/     # Error handling
+│   ├── network/    # API communication
+│   ├── theme/      # App theming
+│   └── utils/      # Utilities
+│
+├── features/
+│   └── country_search/
+│       ├── data/       # Data sources & models
+│       ├── domain/     # Business logic
+│       └── presentation/ # UI components
+│
+├── injection_container.dart # Dependency setup
+└── main.dart          # App entry point
+
+### Dependencies
+Main packages used:
+
+flutter_bloc: State management
+
+http: API calls
+
+shared_preferences: Local storage
+
+connectivity_plus: Network status
+
+loading_animation_widget: Loading animations
