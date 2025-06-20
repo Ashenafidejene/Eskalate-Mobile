@@ -1,76 +1,84 @@
 # Countries Explorer
 
-A Flutter application that displays country information from REST Countries API with search and favorites functionality.
+A Flutter application for exploring country information using the REST Countries API. Features include search, favorites, and offline support.
 
 ## Features
 
-- Browse all countries in grid/list view
+- Browse countries in grid or list view
 - Search countries by name
 - View detailed country information
-- Add/remove favorites
-- Dark/Light theme support
-- Offline favorites storage
+- Add or remove favorites
+- Dark and light theme support
+- Offline storage for favorites
 
 ## Getting Started
 
 ### Prerequisites
 
-- Flutter SDK (latest stable version)
-- Dart SDK (comes with Flutter)
-- IDE: Android Studio or VSCode with Flutter plugins
+- Flutter SDK (latest stable)
+- Dart SDK (bundled with Flutter)
+- IDE: Android Studio or VS Code with Flutter plugins
 
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/Ashenafidejene/Eskalate-Mobile.git
-   cd countries-explorer
+    ```bash
+    git clone https://github.com/Ashenafidejene/Eskalate-Mobile.git
+    cd Eskalate-Mobile/country
+    ```
 
-### Architecture
-The app follows Clean Architecture with:
+2. Get dependencies:
+    ```bash
+    flutter pub get
+    ```
 
-Presentation Layer: UI components (Widgets, BLoCs)
+3. Run the app:
+    ```bash
+    flutter run
+    ```
 
-Domain Layer: Business logic (Entities, Use Cases)
+## Architecture
 
-Data Layer: Data sources (API, Local Storage)
+The app uses Clean Architecture, organized into:
+
+- **Presentation Layer:** UI widgets and BLoCs
+- **Domain Layer:** Entities and use cases
+- **Data Layer:** API and local storage sources
 
 ## State Management
-Using BLoC pattern for:
 
-Clear separation of concerns
+BLoC pattern is used for:
 
-Predictable state changes
+- Separation of concerns
+- Predictable state changes
+- Easier testing
 
-Easy testing
+### Folder Structure
 
-Folder Structure
-
+```
 lib/
 ├── core/
-│   ├── errors/     # Error handling
-│   ├── network/    # API communication
-│   ├── theme/      # App theming
-│   └── utils/      # Utilities
+│   ├── errors/         # Error handling
+│   ├── network/        # API communication
+│   ├── theme/          # App theming
+│   └── utils/          # Utilities
 │
 ├── features/
 │   └── country_search/
-│       ├── data/       # Data sources & models
-│       ├── domain/     # Business logic
-│       └── presentation/ # UI components
+│       ├── data/           # Data sources & models
+│       ├── domain/         # Business logic
+│       └── presentation/   # UI components
 │
 ├── injection_container.dart # Dependency setup
-└── main.dart          # App entry point
+└── main.dart                # App entry point
+```
 
 ### Dependencies
-Main packages used:
 
-flutter_bloc: State management
+Key packages:
 
-http: API calls
-
-shared_preferences: Local storage
-
-connectivity_plus: Network status
-
-loading_animation_widget: Loading animations
+- `flutter_bloc`: State management
+- `http`: API requests
+- `shared_preferences`: Local storage
+- `connectivity_plus`: Network status
+- `loading_animation_widget`: Loading animations
