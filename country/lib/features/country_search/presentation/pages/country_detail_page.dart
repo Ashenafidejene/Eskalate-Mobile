@@ -13,17 +13,60 @@ class CountryDetailPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          // Flag Image
-          SizedBox(
-            height: 250,
-            width: double.infinity,
-            child:
-                country.flag.contains('.svg')
-                    ? SvgPicture.network(country.flag, fit: BoxFit.cover)
-                    : Image.network(country.flag, fit: BoxFit.cover),
+          // Flag Image with back button overlay
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+                child: SizedBox(
+                  height: 250,
+                  width: double.infinity,
+                  child:
+                      country.flag.contains('.svg')
+                          ? SvgPicture.network(country.flag, fit: BoxFit.cover)
+                          : Image.network(country.flag, fit: BoxFit.cover),
+                ),
+              ),
+
+              // Optional gradient overlay for better contrast
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(24),
+                      bottomRight: Radius.circular(24),
+                    ),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.3),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Back button
+              Positioned(
+                top: 40,
+                left: 16,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black.withOpacity(0.5),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+              ),
+            ],
           ),
 
-          // Details Card
+          // Details section
           Expanded(
             child: Container(
               width: double.infinity,
@@ -36,7 +79,7 @@ class CountryDetailPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
+                    // Country name
                     Text(
                       country.name,
                       style: Theme.of(context).textTheme.headlineSmall
@@ -44,7 +87,7 @@ class CountryDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
 
-                    // Detail Sections
+                    // Details
                     DetailView(
                       title: 'Area',
                       value:
@@ -69,7 +112,7 @@ class CountryDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
 
-                    // Timezone Chips
+                    // Timezone chips
                     Wrap(
                       spacing: 12,
                       runSpacing: 8,

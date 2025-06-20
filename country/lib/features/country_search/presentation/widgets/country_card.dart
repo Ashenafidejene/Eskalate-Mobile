@@ -12,58 +12,63 @@ class CountryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => CountryDetailPage(country: country),
-          ),
-        );
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            // Background image (fills the card)
-            Positioned.fill(
-              child:
-                  country.flag.contains('.svg')
-                      ? SvgPicture.network(country.flag, fit: BoxFit.cover)
-                      : Image.network(country.flag, fit: BoxFit.cover),
+    return Column(
+      children: [
+        // Card with image and overlays
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CountryDetailPage(country: country),
+              ),
+            );
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
             ),
-
-            // Dark gradient overlay for better readability
-            Positioned.fill(
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                    colors: [Colors.black.withOpacity(0.5), Colors.transparent],
+            child: Stack(
+              children: [
+                // Flag image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: SizedBox(
+                    height: 160,
+                    width: double.infinity,
+                    child:
+                        country.flag.contains('.svg')
+                            ? SvgPicture.network(
+                              country.flag,
+                              fit: BoxFit.cover,
+                            )
+                            : Image.network(country.flag, fit: BoxFit.cover),
                   ),
                 ),
-              ),
-            ),
 
-            // Overlay content (name, population, favorite)
-            Positioned(
-              bottom: 12,
-              left: 12,
-              right: 12,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Population + Name
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                // Bottom overlay (population + heart)
+                Positioned(
+                  bottom: 8,
+                  left: 12,
+                  right: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Population
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.people_alt_outlined,
-                            color: Colors.white,
                             size: 16,
+                            color: Colors.white,
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -71,54 +76,62 @@ class CountryCard extends StatelessWidget {
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        country.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
+
+                      // Favorite Icon
+                      BlocBuilder<FavoriteBloc, FavoriteState>(
+                        builder: (context, state) {
+                          final isFavorite =
+                              state is FavoriteLoaded &&
+                              state.favorites.any(
+                                (c) => c.name == country.name,
+                              );
+                          return GestureDetector(
+                            onTap: () {
+                              if (isFavorite) {
+                                context.read<FavoriteBloc>().add(
+                                  RemoveFavorite(country),
+                                );
+                              } else {
+                                context.read<FavoriteBloc>().add(
+                                  AddFavorite(country),
+                                );
+                              }
+                            },
+                            child: Icon(
+                              isFavorite
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.white,
+                              size: 20,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
-
-                  // Favorite Icon
-                  BlocBuilder<FavoriteBloc, FavoriteState>(
-                    builder: (context, state) {
-                      final isFavorite =
-                          state is FavoriteLoaded &&
-                          state.favorites.any((c) => c.name == country.name);
-                      return InkWell(
-                        onTap: () {
-                          if (isFavorite) {
-                            context.read<FavoriteBloc>().add(
-                              RemoveFavorite(country),
-                            );
-                          } else {
-                            context.read<FavoriteBloc>().add(
-                              AddFavorite(country),
-                            );
-                          }
-                        },
-                        child: Icon(
-                          isFavorite ? Icons.favorite : Icons.favorite_border,
-                          color: isFavorite ? Colors.red : Colors.white,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+
+        const SizedBox(height: 8),
+
+        // Country Name below the card
+        Text(
+          country.name,
+          style: Theme.of(
+            context,
+          ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
     );
   }
 }

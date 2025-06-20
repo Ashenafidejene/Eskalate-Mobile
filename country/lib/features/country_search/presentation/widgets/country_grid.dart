@@ -13,9 +13,9 @@ class CountryGrid extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 3 / 4,
+        childAspectRatio: 3 / 3.5, // ⬅️ make this slightly taller
         crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
+        mainAxisSpacing: 4, // ⬅️ reduce vertical spacing
       ),
       itemCount: countries.length,
       itemBuilder: (context, index) => CountryCard(country: countries[index]),
