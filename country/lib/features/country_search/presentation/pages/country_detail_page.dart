@@ -11,44 +11,94 @@ class CountryDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(country.name)),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 200,
-              child:
-                  country.flag.contains('.svg')
-                      ? SvgPicture.network(country.flag)
-                      : Image.network(country.flag),
-            ),
-            DetailView(
-              title: 'Area',
-              value: '${country.area?.toStringAsFixed(0) ?? 'N/A'} sq km',
-            ),
-            DetailView(
-              title: 'Population',
-              value: '${country.population.toString()} million',
-            ),
-            DetailView(title: 'Region', value: country.region),
-            DetailView(title: 'Sub Region', value: country.subregion ?? 'N/A'),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Timezone',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          // Flag Image
+          SizedBox(
+            height: 250,
+            width: double.infinity,
+            child:
+                country.flag.contains('.svg')
+                    ? SvgPicture.network(country.flag, fit: BoxFit.cover)
+                    : Image.network(country.flag, fit: BoxFit.cover),
+          ),
+
+          // Details Card
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24.0),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Title
+                    Text(
+                      country.name,
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Detail Sections
+                    DetailView(
+                      title: 'Area',
+                      value:
+                          '${country.area?.toStringAsFixed(0) ?? 'N/A'} sq km',
+                    ),
+                    DetailView(
+                      title: 'Population',
+                      value: '${country.population} million',
+                    ),
+                    DetailView(title: 'Region', value: country.region),
+                    DetailView(
+                      title: 'Sub Region',
+                      value: country.subregion ?? 'N/A',
+                    ),
+
+                    const SizedBox(height: 24),
+                    Text(
+                      'Timezone',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Timezone Chips
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      children:
+                          country.timezones?.map((tz) {
+                            return ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                backgroundColor: Colors.grey.shade100,
+                                foregroundColor: Colors.black87,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 16,
+                                ),
+                              ),
+                              onPressed: () {},
+                              child: Text(tz),
+                            );
+                          }).toList() ??
+                          [const Text('N/A')],
+                    ),
+                  ],
+                ),
               ),
             ),
-            Wrap(
-              spacing: 8,
-              children:
-                  country.timezones
-                      ?.map((tz) => Chip(label: Text(tz)))
-                      .toList() ??
-                  [const Text('N/A')],
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
